@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "visible_shield_cd",
+  "version": "${version}",
+  "name": "Visible-Shield-Cooldown",
+  "description": "Make cooldown of shield visible.",
+  "authors": [
+    "Liu Dongyu",
+    "Kolleen"
+  ],
+  "contact": {
+    "repo": "https://github.com/Viola-Siemens/Visible-Shield-Cooldown"
+  },
+  "license": "AGPL-3.0",
+  "icon": "logo.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.hexagram2021.visible_shield_cd.client.VisibleShieldCooldownClient"
+    ],
+    "main": [
+      "com.hexagram2021.visible_shield_cd.VisibleShieldCooldown"
+    ]
+  },
+  "mixins": [
+    "visible_shield_cooldown.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.19",
+    "minecraft": ">=1.20.3 <1.21"
+  }
+}
