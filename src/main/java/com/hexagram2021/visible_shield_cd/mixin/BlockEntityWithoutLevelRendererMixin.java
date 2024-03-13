@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nullable;
 import java.util.List;
 
-@Mixin(value = BlockEntityWithoutLevelRenderer.class, priority = 43)
+@Mixin(value = BlockEntityWithoutLevelRenderer.class, priority = 3663)
 public class BlockEntityWithoutLevelRendererMixin implements ILivingEntityContext {
 	@Shadow
 	private ShieldModel shieldModel;
