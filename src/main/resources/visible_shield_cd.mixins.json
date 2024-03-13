@@ -4,11 +4,11 @@
   "package": "com.hexagram2021.visible_shield_cd.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "ServerItemCooldownsMixin"
   ],
   "client": [
     "BlockEntityWithoutLevelRendererMixin",
-    "ItemRendererMixin",
-    "ShieldModelMixin"
+    "ItemRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

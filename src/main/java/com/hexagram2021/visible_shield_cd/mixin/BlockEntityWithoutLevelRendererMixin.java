@@ -1,26 +1,33 @@
 package com.hexagram2021.visible_shield_cd.mixin;
 
 import com.hexagram2021.visible_shield_cd.common.ILivingEntityContext;
-import com.hexagram2021.visible_shield_cd.common.IShieldModelWithCooldown;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.model.ShieldModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.entity.BannerBlockEntity;
+import net.minecraft.world.level.block.entity.BannerPattern;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 @Mixin(value = BlockEntityWithoutLevelRenderer.class, priority = 43)
 public class BlockEntityWithoutLevelRendererMixin implements ILivingEntityContext {
@@ -28,33 +35,59 @@ public class BlockEntityWithoutLevelRendererMixin implements ILivingEntityContex
 	private ShieldModel shieldModel;
 
 	@Unique @Nullable
-	private LivingEntity visible_shield_cooldown$contextLivingEntity;
+	private LivingEntity visible_shield_cd$contextLivingEntity;
 
-	@Inject(method = "renderByItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ShieldModel;handle()Lnet/minecraft/client/model/geom/ModelPart;", shift = At.Shift.BEFORE))
-	private void visible_shield_cooldown$renderShieldStatus(ItemStack itemStack, ItemDisplayContext itemDisplayContext, PoseStack transform, MultiBufferSource multiBufferSource, int uv2, int y, CallbackInfo ci) {
-		if(this.shieldModel instanceof IShieldModelWithCooldown shieldModelWithCooldown && this.visible_shield_cooldown$contextLivingEntity instanceof Player player) {
-			shieldModelWithCooldown.visible_shield_cooldown$setCooldown(player.getCooldowns().getCooldownPercent(itemStack.getItem(), 0.0F));
+	@Inject(method = "renderByItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/BlockItem;getBlockEntityData(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/nbt/CompoundTag;", shift = At.Shift.BEFORE), cancellable = true)
+	private void visible_shield_cd$renderShieldStatus(ItemStack itemStack, ItemDisplayContext itemDisplayContext, PoseStack transform, MultiBufferSource multiBufferSource, int uv2, int y, CallbackInfo ci) {
+		if(this.visible_shield_cd$contextLivingEntity instanceof Player player) {
+			float cd = player.getCooldowns().getCooldownPercent(Items.SHIELD, 0.0F);
+			if(cd > 0) {
+				boolean hasBlockEntityData = BlockItem.getBlockEntityData(itemStack) != null;
+				transform.pushPose();
+				transform.scale(1.0f, -1.0f, -1.0f);
+				Material material = hasBlockEntityData ? ModelBakery.SHIELD_BASE : ModelBakery.NO_PATTERN_SHIELD;
+				VertexConsumer vertexConsumer = material.sprite().wrap(ItemRenderer.getFoilBufferDirect(multiBufferSource, this.shieldModel.renderType(material.atlasLocation()), true, itemStack.hasFoil()));
+				float remain = 1.0F - cd;
+				float a = 1.0F;
+				float b = remain * remain;
+				float g = remain * (1.0F + remain * (1.0F - remain));
+				float r = 1.0F - remain * (1.0F - remain * remain);
+				this.shieldModel.handle().render(transform, vertexConsumer, uv2, y, r, g, b, a);
+				if (hasBlockEntityData) {
+					List<Pair<Holder<BannerPattern>, DyeColor>> list = BannerBlockEntity.createPatterns(ShieldItem.getColor(itemStack), BannerBlockEntity.getItemPatterns(itemStack));
+					visible_shield_cd$renderPatterns(transform, multiBufferSource, uv2, y, this.shieldModel.plate(), material, list, itemStack.hasFoil(), r, g, b, a);
+				} else {
+					this.shieldModel.plate().render(transform, vertexConsumer, uv2, y, r, g, b, a);
+				}
+				transform.popPose();
+				ci.cancel();
+			}
 		}
-	}
-
-	@Redirect(method = "renderByItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;render(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V"))
-	private void visible_shield_cooldown$modifyRenderColor(ModelPart instance, PoseStack poseStack, VertexConsumer vertexConsumer, int uv2, int y, float r, float g, float b, float a) {
-		if(this.shieldModel instanceof IShieldModelWithCooldown shieldModelWithCooldown) {
-			float remain = 1.0F - shieldModelWithCooldown.visible_shield_cooldown$getCooldown();
-			b = remain * remain;
-			g = remain * (1.0F + remain * (1.0F - remain));
-			r = 1.0F - remain * (1.0F - remain * remain);
-		}
-		instance.render(poseStack, vertexConsumer, uv2, y, r, g, b, a);
 	}
 
 	@Override
-	public void visible_shield_cooldown$setLivingEntity(@Nullable LivingEntity living) {
-		this.visible_shield_cooldown$contextLivingEntity = living;
+	public void visible_shield_cd$setLivingEntity(@Nullable LivingEntity living) {
+		this.visible_shield_cd$contextLivingEntity = living;
 	}
 
 	@Override @Nullable
-	public LivingEntity visible_shield_cooldown$getLivingEntity() {
-		return this.visible_shield_cooldown$contextLivingEntity;
+	public LivingEntity visible_shield_cd$getLivingEntity() {
+		return this.visible_shield_cd$contextLivingEntity;
+	}
+
+	@Unique
+	private static void visible_shield_cd$renderPatterns(PoseStack poseStack, MultiBufferSource multiBufferSource, int uv2, int y, ModelPart modelPart, Material material,
+														 List<Pair<Holder<BannerPattern>, DyeColor>> list, boolean hasFoil, float r, float g, float b, float a) {
+		modelPart.render(poseStack, material.buffer(multiBufferSource, RenderType::entitySolid, hasFoil), uv2, y);
+		for (int k = 0; k < 17 && k < list.size(); ++k) {
+			Pair<Holder<BannerPattern>, DyeColor> pair = list.get(k);
+			float[] fs = pair.getSecond().getTextureDiffuseColors();
+			pair.getFirst().unwrapKey().map(Sheets::getShieldMaterial).ifPresent(shieldMaterial -> modelPart.render(
+					poseStack,
+					shieldMaterial.buffer(multiBufferSource, RenderType::entityNoOutline),
+					uv2, y,
+					fs[0] * r, fs[1] * g, fs[2] * b, a
+			));
+		}
 	}
 }

@@ -23,10 +23,11 @@
     ]
   },
   "mixins": [
-    "visible_shield_cooldown.mixins.json"
+    "visible_shield_cd.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14.19",
-    "minecraft": ">=1.20.3 <1.21"
+    "minecraft": ">=1.20.3 <1.21",
+    "fabric": ">=0.91.1"
   }
 }

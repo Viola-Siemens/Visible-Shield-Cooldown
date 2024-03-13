@@ -24,9 +24,9 @@ public class ItemRendererMixin {
 	private BlockEntityWithoutLevelRenderer blockEntityRenderer;
 
 	@Inject(method = "renderStatic(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;Lnet/minecraft/world/level/Level;III)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;render(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IILnet/minecraft/client/resources/model/BakedModel;)V", shift = At.Shift.BEFORE))
-	private void visible_shield_cooldown$setContextLivingEntity(@Nullable LivingEntity livingEntity, ItemStack itemStack, ItemDisplayContext itemDisplayContext, boolean leftArm, PoseStack poseStack, MultiBufferSource multiBufferSource, Level level, int r, int g, int b, CallbackInfo ci) {
+	private void visible_shield_cd$setContextLivingEntity(@Nullable LivingEntity livingEntity, ItemStack itemStack, ItemDisplayContext itemDisplayContext, boolean leftArm, PoseStack poseStack, MultiBufferSource multiBufferSource, Level level, int r, int g, int b, CallbackInfo ci) {
 		if(this.blockEntityRenderer instanceof ILivingEntityContext livingEntityContext) {
-			livingEntityContext.visible_shield_cooldown$setLivingEntity(livingEntity);
+			livingEntityContext.visible_shield_cd$setLivingEntity(livingEntity);
 		}
 	}
 }
