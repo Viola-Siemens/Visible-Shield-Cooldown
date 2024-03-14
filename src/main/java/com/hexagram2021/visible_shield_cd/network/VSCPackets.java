@@ -1,5 +1,6 @@
 package com.hexagram2021.visible_shield_cd.network;
 
+import com.hexagram2021.visible_shield_cd.VisibleShieldCooldown;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +25,7 @@ public final class VSCPackets {
 				int time = buf.readInt();
 				Player player = client.level.getPlayerByUUID(uuid);
 				if(item != null && player != null) {
-					player.getCooldowns().addCooldown(item, time);
+					VisibleShieldCooldown.addCoolDownToPlayer(player, item, time);
 				}
 			}
 		});
