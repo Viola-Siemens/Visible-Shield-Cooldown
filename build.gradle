@@ -14,6 +14,15 @@ base {
 }
 
 repositories {
+    maven {
+        name 'Xander Maven'
+        url 'https://maven.isxander.dev/releases'
+    }
+
+    maven {
+        name 'terraformersmc Maven'
+        url "https://maven.terraformersmc.com"
+    }
 }
 
 dependencies {
@@ -23,7 +32,14 @@ dependencies {
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+    modImplementation("dev.isxander.yacl:yet-another-config-lib-fabric:3.3.2+1.20.4")
+    modImplementation("com.terraformersmc:modmenu:9.0.0")
+
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/visible_shield_cd.accesswidener")
 }
 
 processResources {

@@ -1,0 +1,3 @@
+accessWidener	v1 named
+
+accessible method net/minecraft/world/entity/Entity calculateViewVector (FF)Lnet/minecraft/world/phys/Vec3;

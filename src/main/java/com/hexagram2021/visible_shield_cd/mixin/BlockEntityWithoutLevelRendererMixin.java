@@ -1,5 +1,7 @@
 package com.hexagram2021.visible_shield_cd.mixin;
 
+import com.hexagram2021.visible_shield_cd.client.VisibleShieldCooldownClient;
+import com.hexagram2021.visible_shield_cd.client.config.VisibleShieldCooldownConfig;
 import com.hexagram2021.visible_shield_cd.common.ILivingEntityContext;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -48,10 +50,11 @@ public class BlockEntityWithoutLevelRendererMixin implements ILivingEntityContex
 				Material material = hasBlockEntityData ? ModelBakery.SHIELD_BASE : ModelBakery.NO_PATTERN_SHIELD;
 				VertexConsumer vertexConsumer = material.sprite().wrap(ItemRenderer.getFoilBufferDirect(multiBufferSource, this.shieldModel.renderType(material.atlasLocation()), true, itemStack.hasFoil()));
 				float remain = 1.0F - cd;
-				float a = 1.0F;
-				float b = remain * remain;
-				float g = remain * (1.0F + remain * (1.0F - remain));
-				float r = 1.0F - remain * (1.0F - remain * remain);
+				VisibleShieldCooldownConfig.RenderMode renderMode = VisibleShieldCooldownClient.getConfig().getRenderMode();
+				float a = renderMode.a(remain);
+				float b = renderMode.b(remain);
+				float g = renderMode.g(remain);
+				float r = renderMode.r(remain);
 				this.shieldModel.handle().render(transform, vertexConsumer, uv2, y, r, g, b, a);
 				if (hasBlockEntityData) {
 					List<Pair<Holder<BannerPattern>, DyeColor>> list = BannerBlockEntity.createPatterns(ShieldItem.getColor(itemStack), BannerBlockEntity.getItemPatterns(itemStack));

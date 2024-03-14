@@ -1,0 +1,9 @@
+{
+  "language": "English",
+  "language.code": "en_us",
+  "language.region": "United States",
+
+  "config.visible_shield_cd.title": "Visible Shield Cooldown",
+  "config.visible_shield_cd.option.renderMode": "Render Mode",
+  "config.visible_shield_cd.option.renderMode.desc": "linear: linear gradient from red to green to the original color; dispersed: five dispersed colors from dark to light; smooth_dispersed: smooth version of dispersed."
+}
