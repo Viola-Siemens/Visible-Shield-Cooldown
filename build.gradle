@@ -40,6 +40,15 @@ dependencies {
 
 loom {
     accessWidenerPath = file("src/main/resources/visible_shield_cd.accesswidener")
+
+    runs {
+        server {
+            runDir "run/server"
+        }
+        client {
+            runDir "run/client"
+        }
+    }
 }
 
 processResources {
