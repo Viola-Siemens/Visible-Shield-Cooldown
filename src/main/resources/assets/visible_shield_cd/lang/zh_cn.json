@@ -5,7 +5,7 @@
 
   "config.visible_shield_cd.title": "可视化盾牌冷却",
   "config.visible_shield_cd.option.renderMode": "显示模式",
-  "config.visible_shield_cd.option.renderMode.desc": "linear：从红到绿再到原色的线性渐变；dispersed：五种由深到浅的离散的颜色；smooth_dispersed：dispersed的平滑版。",
+  "config.visible_shield_cd.option.renderMode.desc": "disable：禁用可视化盾牌冷却；\nlinear：从红到绿再到原色的线性渐变；\ndispersed：五种由深到浅的离散的颜色；\nsmooth_dispersed：dispersed的平滑版\ncustom：使用下面的自定义颜色。",
   "config.visible_shield_cd.option.colorCount": "自定义颜色数量",
   "config.visible_shield_cd.option.customColors": "自定义颜色%d"
 }
