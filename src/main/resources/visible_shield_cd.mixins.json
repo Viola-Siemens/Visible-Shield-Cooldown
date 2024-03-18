@@ -8,7 +8,8 @@
   ],
   "client": [
     "BlockEntityWithoutLevelRendererMixin",
-    "ItemRendererMixin"
+    "ItemRendererMixin",
+    "RemotePlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

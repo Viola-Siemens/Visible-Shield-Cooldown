@@ -46,7 +46,7 @@ public class BlockEntityWithoutLevelRendererMixin implements ILivingEntityContex
 			if(cd > 0) {
 				boolean hasBlockEntityData = BlockItem.getBlockEntityData(itemStack) != null;
 				transform.pushPose();
-				transform.scale(1.0f, -1.0f, -1.0f);
+				transform.scale(1.0F, -1.0F, -1.0F);
 				Material material = hasBlockEntityData ? ModelBakery.SHIELD_BASE : ModelBakery.NO_PATTERN_SHIELD;
 				VertexConsumer vertexConsumer = material.sprite().wrap(ItemRenderer.getFoilBufferDirect(multiBufferSource, this.shieldModel.renderType(material.atlasLocation()), true, itemStack.hasFoil()));
 				float remain = 1.0F - cd;

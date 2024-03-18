@@ -25,6 +25,7 @@ public class VisibleShieldCooldownClient implements ClientModInitializer {
 				Vec3 damageDirection = player.position().vectorTo(targetPlayer.position());
 				Vec3 view = targetPlayer.calculateViewVector(0.0f, targetPlayer.getYHeadRot());
 				if(new Vec3(damageDirection.x, 0.0, damageDirection.z).dot(view) < 0) {
+					targetPlayer.stopUsingItem();
 					VisibleShieldCooldown.addCoolDownToPlayer(targetPlayer, Items.SHIELD, 100);
 				}
 			}

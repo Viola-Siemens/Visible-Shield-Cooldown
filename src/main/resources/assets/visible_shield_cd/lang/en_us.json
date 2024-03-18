@@ -6,6 +6,5 @@
   "config.visible_shield_cd.title": "Visible Shield Cooldown",
   "config.visible_shield_cd.option.renderMode": "Render Mode",
   "config.visible_shield_cd.option.renderMode.desc": "disable: don't show visible shield cooldown;\nlinear: linear gradient from red to green to the original color;\ndispersed: five dispersed colors from dark to light;\nsmooth_dispersed: smooth version of dispersed;\ncustom: use the following custom color.",
-  "config.visible_shield_cd.option.colorCount": "Custom Color Count",
-  "config.visible_shield_cd.option.customColors": "Custom Color %d"
+  "config.visible_shield_cd.option.customColors": "Custom Colors"
 }
