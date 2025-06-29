@@ -1,10 +1,7 @@
 package com.hexagram2021.visible_shield_cd.mixin;
 
-import com.hexagram2021.visible_shield_cd.network.VSCPackets;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import com.hexagram2021.visible_shield_cd.network.payload.UpdatePlayerCooldownPayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ServerItemCooldowns;
@@ -22,25 +19,17 @@ public class ServerItemCooldownsMixin {
 
 	@Inject(method = {"onCooldownStarted"}, at = @At(value = "TAIL"))
 	private void visible_shield_cd$sendStartToOtherPlayers(Item item, int time, CallbackInfo ci) {
-		FriendlyByteBuf buf = PacketByteBufs.create();
-		buf.writeUUID(this.player.getUUID());
-		buf.writeId(BuiltInRegistries.ITEM, item);
-		buf.writeInt(time);
 		this.player.server.getPlayerList().getPlayers().forEach(player -> {
 			if(!player.equals(this.player)) {
-				ServerPlayNetworking.send(player, VSCPackets.VSC_OTHER_PLAYER_COOLDOWN, buf);
+				ServerPlayNetworking.send(player, new UpdatePlayerCooldownPayload(this.player.getUUID(), item, time));
 			}
 		});
 	}
 	@Inject(method = {"onCooldownEnded"}, at = @At(value = "TAIL"))
 	private void visible_shield_cd$sendEndToOtherPlayers(Item item, CallbackInfo ci) {
-		FriendlyByteBuf buf = PacketByteBufs.create();
-		buf.writeUUID(this.player.getUUID());
-		buf.writeId(BuiltInRegistries.ITEM, item);
-		buf.writeInt(0);
 		this.player.server.getPlayerList().getPlayers().forEach(player -> {
 			if(!player.equals(this.player)) {
-				ServerPlayNetworking.send(player, VSCPackets.VSC_OTHER_PLAYER_COOLDOWN, buf);
+				ServerPlayNetworking.send(player, new UpdatePlayerCooldownPayload(this.player.getUUID(), item, 0));
 			}
 		});
 	}

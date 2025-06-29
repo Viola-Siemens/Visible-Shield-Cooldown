@@ -160,28 +160,28 @@ public final class VisibleShieldCooldownConfig {
 	float getCustomA(float remain) {
 		int index = Mth.floor(remain * this.customColors.size());
 		if(index >= this.customColors.size()) {
-			return this.customColors.get(this.customColors.size() - 1).getAlpha();
+			return this.customColors.getLast().getAlpha();
 		}
 		return this.customColors.get(index).getAlpha();
 	}
 	int getCustomR(float remain) {
 		int index = Mth.floor(remain * this.customColors.size());
 		if(index >= this.customColors.size()) {
-			return this.customColors.get(this.customColors.size() - 1).getRed();
+			return this.customColors.getLast().getRed();
 		}
 		return this.customColors.get(index).getRed();
 	}
 	int getCustomG(float remain) {
 		int index = Mth.floor(remain * this.customColors.size());
 		if(index >= this.customColors.size()) {
-			return this.customColors.get(this.customColors.size() - 1).getGreen();
+			return this.customColors.getLast().getGreen();
 		}
 		return this.customColors.get(index).getGreen();
 	}
 	int getCustomB(float remain) {
 		int index = Mth.floor(remain * this.customColors.size());
 		if(index >= this.customColors.size()) {
-			return this.customColors.get(this.customColors.size() - 1).getBlue();
+			return this.customColors.getLast().getBlue();
 		}
 		return this.customColors.get(index).getBlue();
 	}

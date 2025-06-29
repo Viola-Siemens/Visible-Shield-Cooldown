@@ -2,8 +2,9 @@ package com.hexagram2021.visible_shield_cd.client;
 
 import com.hexagram2021.visible_shield_cd.VisibleShieldCooldown;
 import com.hexagram2021.visible_shield_cd.client.config.VisibleShieldCooldownConfig;
-import com.hexagram2021.visible_shield_cd.network.VSCPackets;
+import com.hexagram2021.visible_shield_cd.network.payload.UpdatePlayerCooldownPayload;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -18,7 +19,15 @@ import org.jetbrains.annotations.Nullable;
 public class VisibleShieldCooldownClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
-		VSCPackets.initClient();
+		ClientPlayNetworking.registerGlobalReceiver(UpdatePlayerCooldownPayload.TYPE, (payload, context) -> {
+			Level level = context.client().level;
+			if(level != null) {
+				Player player = level.getPlayerByUUID(payload.uuid());
+				if(player != null) {
+					VisibleShieldCooldown.addCoolDownToPlayer(player, payload.item(), payload.time());
+				}
+			}
+		});
 
 		AttackEntityCallback.EVENT.register((Player player, Level world, InteractionHand hand, Entity entity, @Nullable EntityHitResult hitResult) -> {
 			if(entity instanceof Player targetPlayer && targetPlayer.isBlocking() && player.canDisableShield()) {

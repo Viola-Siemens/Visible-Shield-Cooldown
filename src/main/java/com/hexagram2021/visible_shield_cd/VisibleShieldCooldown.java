@@ -1,7 +1,8 @@
 package com.hexagram2021.visible_shield_cd;
 
-import com.hexagram2021.visible_shield_cd.network.VSCPackets;
+import com.hexagram2021.visible_shield_cd.network.payload.UpdatePlayerCooldownPayload;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 
@@ -10,7 +11,7 @@ public class VisibleShieldCooldown implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		VSCPackets.init();
+		PayloadTypeRegistry.playS2C().register(UpdatePlayerCooldownPayload.TYPE, UpdatePlayerCooldownPayload.STREAM_CODEC);
 	}
 
 	public static void addCoolDownToPlayer(Player player, Item item, int time) {
